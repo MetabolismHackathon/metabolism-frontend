@@ -1,0 +1,41 @@
+.container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .backButton {
+    position: absolute;
+    padding: 10px;
+    left: 10vw;
+    top: 0;
+    display: block;
+    height: 50px;
+    font-size: 24px;
+    border-bottom: 1px solid black;
+  }
+
+  .signOutButton {
+    position: absolute;
+    right: 10vw;
+    top: 0;
+    padding: 10px;
+    display: block;
+    height: 50px;
+    font-size: 24px;
+    border-bottom: 1px solid black;
+  }
+
+  .artwork {
+    width: 900px;
+    height: 900px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

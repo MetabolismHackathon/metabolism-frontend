@@ -1,0 +1,18 @@
+.container {
+  // background-color: aqua;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .signinButton {
+    display: block;
+    background-color: aliceblue;
+    border-radius: 45px;
+    width: 400px;
+    height: 140px;
+    font-size: 42px;
+    font-weight: 700;
+    border: 1px solid gray;
+  }
+}

@@ -1,0 +1,35 @@
+.container {
+  // background-color: aqua;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .signOutButton {
+    position: absolute;
+    right: 10vw;
+    top: 0;
+    padding: 10px;
+    display: block;
+    height: 50px;
+    font-size: 24px;
+    border-bottom: 1px solid black;
+  }
+
+  .uploadLink {
+    padding: 20px;
+  }
+
+  .checkNotice {
+    font-size: 24px;
+    font-weight: 600;
+    padding: 10px;
+  }
+
+  .artworksList {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+  }
+}
