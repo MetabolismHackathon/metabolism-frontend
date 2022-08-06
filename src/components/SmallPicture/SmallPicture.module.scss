@@ -1,6 +1,15 @@
 .container {
   position: relative;
   border: 1px solid black;
+
+  .hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 255, 255, 0.6);
+    width: 100%;
+    height: 100%;
+  }
   .evaluate {
     position: absolute;
 

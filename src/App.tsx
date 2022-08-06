@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useAuthContext } from './context/authContext';
-import { ArtworkContext, useArtworkContext } from './context/artworkContext';
+import { useArtworkContext } from './context/artworkContext';
 import { ArtworkI, PieceI } from './types';
 import { UploadArtworkPage, HomePage, SingInPage, ArtworkPage, StakePage } from 'src/routes';
 import './App.css';
@@ -20,6 +20,8 @@ const generatePieces = (quant: number): PieceI[] => {
         ? '0xDb0b11d1281da49e950f89bD0F6B47D464d25F91'
         : index % 4 === 0
         ? '0x1215991085d541A586F0e1968355A36E58C9b2b4'
+        : (index + 2) % 5 === 0
+        ? 'oneAnotherUser'
         : null,
     imageUrl: '',
   }));
@@ -39,12 +41,12 @@ const artworks: ArtworkI[] = [
   {
     id: '1',
     url: 'images/tmp/field.jpeg',
-    rows: 2,
-    cols: 3,
-    piecesQuantity: 6,
+    rows: 3,
+    cols: 4,
+    piecesQuantity: 12,
     width: 900,
     height: 800,
-    pieces: generatePieces(6),
+    pieces: generatePieces(12),
   },
 ];
 
@@ -74,7 +76,7 @@ function App() {
       setLocation(location);
     }
   }, []);
-  console.log('current user', currentUser);
+  // console.log('current user', currentUser);
   return (
     <div className="App">
       <BrowserRouter>

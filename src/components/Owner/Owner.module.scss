@@ -1,0 +1,22 @@
+.container {
+  background-color: lemonchiffon;
+  border-radius: 20px;
+  display: flex;
+  border: 2px dotted red;
+  margin-bottom: 10px;
+  &:hover {
+    border: 4px dotted yellow;
+    margin-bottom: 6px;
+  }
+
+  .id {
+    padding: 20px 10px;
+    text-align: start;
+    width: 40%;
+  }
+  .pieces,
+  .current {
+    padding: 20px 10px;
+    text-align: start;
+  }
+}
