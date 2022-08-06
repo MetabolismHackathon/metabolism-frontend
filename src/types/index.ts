@@ -1,3 +1,9 @@
+export type UserIdI = string;
+export interface PieceI {
+  id: string;
+  ownerId: UserIdI | null;
+  imageUrl: string;
+}
 export interface ArtworkI {
   id: string;
   url: string;
@@ -6,6 +12,7 @@ export interface ArtworkI {
   piecesQuantity: number;
   width: number;
   height: number;
+  pieces: PieceI[];
 }
 
 export interface IArtworkSlug {

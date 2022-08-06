@@ -4,13 +4,27 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useAuthContext } from './context/authContext';
 import { ArtworkContext, useArtworkContext } from './context/artworkContext';
-import { ArtworkI } from './types';
+import { ArtworkI, PieceI } from './types';
 import { UploadArtworkPage, HomePage, SingInPage, ArtworkPage, StakePage } from 'src/routes';
 import './App.css';
 
 const Page404 = () => <div>404 page</div>;
 
 // just a slug before backend is available
+
+const generatePieces = (quant: number): PieceI[] => {
+  const p = [...Array(quant)].map((_, index) => ({
+    id: String(index),
+    ownerId:
+      (index + 1) % 3 === 0
+        ? '0xDb0b11d1281da49e950f89bD0F6B47D464d25F91'
+        : index % 4 === 0
+        ? '0x1215991085d541A586F0e1968355A36E58C9b2b4'
+        : null,
+    imageUrl: '',
+  }));
+  return p;
+};
 const artworks: ArtworkI[] = [
   {
     id: '0',
@@ -20,6 +34,7 @@ const artworks: ArtworkI[] = [
     piecesQuantity: 4,
     width: 700,
     height: 700,
+    pieces: generatePieces(4),
   },
   {
     id: '1',
@@ -29,6 +44,7 @@ const artworks: ArtworkI[] = [
     piecesQuantity: 6,
     width: 900,
     height: 800,
+    pieces: generatePieces(6),
   },
 ];
 
@@ -48,7 +64,7 @@ function App() {
   useEffect(() => {
     setArtworks!(artworks);
   });
-  
+
   useEffect(() => {
     const previousState = window.localStorage.getItem('slapsketch');
 
@@ -58,6 +74,7 @@ function App() {
       setLocation(location);
     }
   }, []);
+  console.log('current user', currentUser);
   return (
     <div className="App">
       <BrowserRouter>

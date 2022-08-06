@@ -2,7 +2,8 @@ export interface ISmallPictureProps {
   children?: React.ReactNode;
   width: number;
   height: number;
-  imgUrl: string;
-  pieceId: string;
+  imageUrl: string;
+  id: string;
   artworkId: string;
+  ownerId: string | null;
 }

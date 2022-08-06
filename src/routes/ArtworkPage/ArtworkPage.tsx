@@ -16,7 +16,6 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
   const params: { artworkId: string } = useParams();
   const { artworks } = useArtworkContext();
   
-
   useEffect(() => {
     if (!!artworks) {
       const actualArtwork = artworks.find(({ id }) => id === params.artworkId);
@@ -63,14 +62,13 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
             height={`${currentArtwork?.height}px`}
           />
 
-          {[...Array(currentArtwork.piecesQuantity)].map((_, index) => (
+          {currentArtwork.pieces.map((piece) => (
             <SmallPicture
-              key={index}
+              key={piece.id}
               width={pieceSize.width}
               height={pieceSize.height}
-              imgUrl={`${index}-picture`}
-              pieceId={String(index)}
               artworkId={params.artworkId}
+              {...piece}
             />
           ))}
         </div>
