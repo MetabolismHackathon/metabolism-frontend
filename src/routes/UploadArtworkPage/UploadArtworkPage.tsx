@@ -1,12 +1,9 @@
 import { useHistory, Link } from 'react-router-dom';
-
+import { Header } from 'src/components';
 import { IUploadArtworkPageProps } from './UploadArtworkPageProps';
 import styles from './UploadArtworkPage.module.scss';
 export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
   const history = useHistory();
-  const signOutHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-    history.push('/signin');
-  };
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     history.push('/');
@@ -14,12 +11,11 @@ export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
 
   return (
     <div className={styles.container}>
-      <Link to="/">
-        <div className={styles.backButton}>Back To Artwork List</div>
-      </Link>
-      <button className={styles.signOutButton} onClick={signOutHandler}>
-        Sign Out
-      </button>
+      <Header>
+        <Link to="/">
+          <div className={styles.backButton}>Back To Artwork List</div>
+        </Link>
+      </Header>
       <div>
         <h1>Upload your artwork</h1>
         <form className={styles.form} onSubmit={submitHandler}>
