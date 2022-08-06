@@ -10,8 +10,6 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
   artworkId,
 }) => {
   const history = useHistory();
-  const location = useLocation();
-  console.log(history, location);
   const stakeHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     history.push(`/stakes/${artworkId}/${pieceId}`);
   };

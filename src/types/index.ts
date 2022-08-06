@@ -1,21 +1,12 @@
-// export interface ArtworkI {
-//   artworkId: string;
-//   author: string;
-//   numPieces: number;
-//   backgroundImage: string;
-//   imageSample: string;
-//   authorName: string;
-//   title: string;
-//   description: string;
-//   variant: string;
-//   cols: number;
-//   rows: number;
-//   commonDetailsIpfs: string;
-//   minted: number;
-//   tx: string;
-//   startPiece?: number;
-//   pieces?: PieceTokenI[];
-// }
+export interface ArtworkI {
+  id: string;
+  url: string;
+  rows: number;
+  cols: number;
+  piecesQuantity: number;
+  width: number;
+  height: number;
+}
 
 export interface IArtworkSlug {
   backgroundImage: string;

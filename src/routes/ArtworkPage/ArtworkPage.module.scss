@@ -33,9 +33,15 @@
   }
 
   .artwork {
-    width: 900px;
-    height: 900px;
+    position: relative;
+
     display: flex;
     flex-wrap: wrap;
+
+    .artworkBackground {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 }

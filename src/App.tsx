@@ -3,16 +3,40 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useAuthContext } from './context/authContext';
+import { ArtworkContext, useArtworkContext } from './context/artworkContext';
+import { ArtworkI } from './types';
 import { UploadArtworkPage, HomePage, SingInPage, ArtworkPage, StakePage } from 'src/routes';
 import './App.css';
 
 const Page404 = () => <div>404 page</div>;
 
+// just a slug before backend is available
+const artworks: ArtworkI[] = [
+  {
+    id: '0',
+    url: 'images/tmp/island.jpeg',
+    rows: 2,
+    cols: 2,
+    piecesQuantity: 4,
+    width: 700,
+    height: 700,
+  },
+  {
+    id: '1',
+    url: 'images/tmp/field.jpeg',
+    rows: 2,
+    cols: 3,
+    piecesQuantity: 6,
+    width: 900,
+    height: 800,
+  },
+];
+
 function App() {
   const [location, setLocation] = useState<string>('');
   const { active, account } = useWeb3React<Web3Provider>();
   const { setCurrentUser, currentUser } = useAuthContext();
-  console.log(currentUser);
+  const { setArtworks } = useArtworkContext();
 
   useEffect(() => {
     if (!active && !account) {
@@ -21,6 +45,10 @@ function App() {
     if (!!account) setCurrentUser!(account);
   }, [account, setCurrentUser, active]);
 
+  useEffect(() => {
+    setArtworks!(artworks);
+  });
+  
   useEffect(() => {
     const previousState = window.localStorage.getItem('slapsketch');
 
