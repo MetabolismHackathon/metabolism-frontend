@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
@@ -9,6 +9,7 @@ import './App.css';
 const Page404 = () => <div>404 page</div>;
 
 function App() {
+  const [location, setLocation] = useState<string>('');
   const { active, account } = useWeb3React<Web3Provider>();
   const { setCurrentUser, currentUser } = useAuthContext();
   console.log(currentUser);
@@ -19,10 +20,21 @@ function App() {
     }
     if (!!account) setCurrentUser!(account);
   }, [account, setCurrentUser, active]);
+
+  useEffect(() => {
+    const previousState = window.localStorage.getItem('slapsketch');
+
+    if (!!previousState) {
+      const parsedPreviousState: { location: string } = JSON.parse(previousState);
+      const { location } = parsedPreviousState;
+      setLocation(location);
+    }
+  }, []);
   return (
     <div className="App">
       <BrowserRouter>
         {!currentUser && <Redirect to="/signin" />}
+        {!!currentUser && <Redirect to={`${location}`} />}
 
         <Switch>
           <Route path="/" exact component={HomePage} />

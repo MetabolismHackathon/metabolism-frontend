@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { persistLocation } from 'src/helpers';
 import { ArtworksThumbnail, Header } from 'src/components';
 import { IHomePageProps } from './HomePageProps';
 import styles from './HomePage.module.scss';
@@ -8,6 +10,9 @@ const artworks = [...Array(3)];
 // const artworks: any[] = [];
 
 export const HomePage: React.FC<IHomePageProps> = () => {
+  useEffect(() => {
+    persistLocation(`/`);
+  }, []);
   return (
     <div className={styles.container}>
       <Header />

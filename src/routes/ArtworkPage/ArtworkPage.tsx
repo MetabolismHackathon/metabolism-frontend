@@ -1,11 +1,17 @@
 import { useParams, Link } from 'react-router-dom';
 import { SmallPicture, Header } from 'src/components';
+import { persistLocation } from 'src/helpers';
 import { IArtworkPageProps } from './ArtworkPageProps';
 import styles from './ArtworkPage.module.scss';
+import { useEffect } from 'react';
 
 const pieces = [...Array(9)];
 export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
   const params: { artworkId: string } = useParams();
+
+  useEffect(() => {
+    persistLocation(`/artworks/${params.artworkId}`);
+  }, [params.artworkId]);
 
   return (
     <div className={styles.container}>
