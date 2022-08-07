@@ -12,21 +12,39 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
   id,
   ownerId,
   artworkId,
+  likes,
+  dislikes,
 }) => {
   const [ownedByCurrentUser, setOwnedByCurrentUse] = useState<boolean>(false);
+  const [evaluation, setEvaluation] = useState<{ likes: number; dislikes: number }>({
+    likes: 0,
+    dislikes: 0,
+  });
   const { currentUser } = useAuthContext();
-  const { hoveredOwnerId } = useArtworkContext();
+  const { hoveredOwnerId, piecesEvaluation, setPiecesEvaluation } = useArtworkContext();
   const history = useHistory();
   const stakeHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     history.push(`/stakes/${artworkId}/${id}`);
   };
 
   const likeHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-    alert('like!');
+    // alert('like!');
+    const evalIndex = piecesEvaluation.findIndex((piecesEval) => piecesEval.id === id);
+    if (evalIndex >= 0) {
+      const evaluationClone = piecesEvaluation.slice(0);
+      evaluationClone[evalIndex].likes += 1;
+      setPiecesEvaluation!(evaluationClone);
+    }
   };
 
   const dislikeHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-    alert('dislike!');
+    // alert('dislike!');
+    const evalIndex = piecesEvaluation.findIndex((piecesEval) => piecesEval.id === id);
+    if (evalIndex >= 0) {
+      const evaluationClone = piecesEvaluation.slice(0);
+      evaluationClone[evalIndex].dislikes += 1;
+      setPiecesEvaluation!(evaluationClone);
+    }
   };
 
   useEffect(() => {
@@ -34,11 +52,26 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
       setOwnedByCurrentUse(currentUser === ownerId);
     }
   }, [currentUser, setOwnedByCurrentUse, ownerId]);
+
+  useEffect(() => {
+    const currentPieceEvaluation = piecesEvaluation.find((pieceEval) => id === pieceEval.id);
+    if (!!currentPieceEvaluation) {
+      setEvaluation({
+        likes: currentPieceEvaluation.likes,
+        dislikes: currentPieceEvaluation.dislikes,
+      });
+    }
+  }, [id, piecesEvaluation]);
   // console.log(ownedByCurrentUser);
+  const containerClickHandler = () => {
+    console.log('click');
+    history.push(`/uploadartwork/${artworkId}/${id}`);
+  };
   return (
     <div
       className={cn(styles.container)}
       style={{ width: `${width}px`, height: `${height}px` }}
+      onClick={containerClickHandler}
     >
       {hoveredOwnerId && hoveredOwnerId === ownerId && <div className={styles.hover}></div>}
       SmallPicture {imageUrl} Yours: {String(ownedByCurrentUser)}
@@ -53,12 +86,12 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
         <div className={styles.evaluate}>
           <div className={styles.like}>
             <button className={cn(styles.evaluateButton)} onClick={likeHandler}>
-              Like
+              {evaluation.likes} x Likes
             </button>
           </div>
           <div className={styles.dislike}>
             <button className={cn(styles.evaluateButton)} onClick={dislikeHandler}>
-              Dislike
+              {evaluation.dislikes} x Dislikes
             </button>
           </div>
         </div>

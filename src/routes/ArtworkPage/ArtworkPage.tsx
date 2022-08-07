@@ -1,5 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
+import cn from 'classnames';
 import { SmallPicture, Header, Owner } from 'src/components';
+import api from 'src/api';
 import { persistLocation } from 'src/helpers';
 import { useArtworkContext } from 'src/context/artworkContext';
 import { IArtworkPageProps } from './ArtworkPageProps';
@@ -9,13 +11,36 @@ import { ArtworkI } from 'src/types';
 
 export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
   const [currentArtwork, setCurrentArtwork] = useState<ArtworkI | null>(null);
+  const [isSubmitAllowed, setSubmitAllowed] = useState<boolean>(false);
   const [ownersList, setOwnersList] = useState<{ id: string; piecesQuantity: number }[]>([]);
   const [pieceSize, setPieceSize] = useState<{ width: number; height: number }>({
     width: 0,
     height: 0,
   });
   const params: { artworkId: string } = useParams();
-  const { artworks } = useArtworkContext();
+  const { artworks, setPiecesEvaluation, piecesEvaluation, initialState } =
+    useArtworkContext();
+  // console.log('piecesEvaluation', piecesEvaluation);
+  // console.log('initialState', initialState);
+
+  const changesSubmitHandler = async () => {
+    if (currentArtwork) {
+      const piecesToUpdate = currentArtwork.pieces.slice(0).map((piece) => {
+        const pieceEvals = piecesEvaluation.find(({ id }) => piece.id === id);
+        return {
+          ...piece,
+          likes: pieceEvals ? pieceEvals.likes : piece.likes,
+          dislikes: pieceEvals ? pieceEvals.dislikes : piece.dislikes,
+        };
+      });
+      const updatedArtwork = { ...currentArtwork, pieces: piecesToUpdate };
+
+      const result = await api.sendUpdatedArtwork(updatedArtwork);
+
+      if (result) alert('updates successfully sent');
+      if (!result) alert('sending updates failed');
+    }
+  };
 
   useEffect(() => {
     if (!!artworks) {
@@ -28,6 +53,17 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
   useEffect(() => {
     persistLocation(`/artworks/${params.artworkId}`);
   }, [params.artworkId]);
+
+  useEffect(() => {
+    if (currentArtwork) {
+      const currentArtworkInitaState = initialState.find(({ id }) => currentArtwork.id === id);
+      const currentEvalsQuantity = piecesEvaluation.reduce<number>(
+        (acc, { likes, dislikes }) => likes + dislikes + acc,
+        0,
+      );
+      setSubmitAllowed(currentArtworkInitaState?.evalsQuantity !== currentEvalsQuantity);
+    }
+  }, [initialState, currentArtwork, piecesEvaluation]);
 
   useEffect(() => {
     // console.log('currentArtwork', currentArtwork);
@@ -49,9 +85,15 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
         },
         [],
       );
+      const evaluation = currentArtwork.pieces.map(({ id, likes, dislikes }) => ({
+        id,
+        likes,
+        dislikes,
+      }));
+      setPiecesEvaluation!(evaluation);
       setOwnersList(owners);
     }
-  }, [currentArtwork]);
+  }, [currentArtwork, setPiecesEvaluation]);
 
   return (
     <div className={styles.container}>
@@ -91,6 +133,12 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
           </div>
         )}
         <div className={styles.panel}>
+          <button
+            className={cn(styles.submitButton, isSubmitAllowed ? null : styles.disabled)}
+            onClick={changesSubmitHandler}
+          >
+            Submit Updates
+          </button>
           <div className={styles.artworkDescription}>description</div>
           <div className={styles.ownersList}>
             {ownersList.map((owner) => (

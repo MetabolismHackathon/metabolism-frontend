@@ -3,6 +3,8 @@ export interface PieceI {
   id: string;
   ownerId: UserIdI | null;
   imageUrl: string;
+  likes: number;
+  dislikes: number;
 }
 export interface ArtworkI {
   id: string;

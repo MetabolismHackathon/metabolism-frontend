@@ -6,4 +6,6 @@ export interface ISmallPictureProps {
   id: string;
   artworkId: string;
   ownerId: string | null;
+  likes: number;
+  dislikes: number;
 }

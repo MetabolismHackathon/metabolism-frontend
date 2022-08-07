@@ -24,6 +24,8 @@ const generatePieces = (quant: number): PieceI[] => {
         ? 'oneAnotherUser'
         : null,
     imageUrl: '',
+    likes: 0,
+    dislikes: 0,
   }));
   return p;
 };
@@ -54,7 +56,7 @@ function App() {
   const [location, setLocation] = useState<string>('');
   const { active, account } = useWeb3React<Web3Provider>();
   const { setCurrentUser, currentUser } = useAuthContext();
-  const { setArtworks } = useArtworkContext();
+  const { setArtworks, setInitialState } = useArtworkContext();
 
   useEffect(() => {
     if (!active && !account) {
@@ -65,7 +67,15 @@ function App() {
 
   useEffect(() => {
     setArtworks!(artworks);
-  });
+    const initialState = artworks.map(({ id, pieces }) => {
+      const evalsQuantity = pieces.reduce<number>(
+        (acc, { likes, dislikes }) => likes + dislikes + acc,
+        0,
+      );
+      return { id, evalsQuantity };
+    });
+    setInitialState!(initialState);
+  }, [setArtworks, setInitialState]);
 
   useEffect(() => {
     const previousState = window.localStorage.getItem('slapsketch');
@@ -85,12 +95,16 @@ function App() {
 
         <Switch>
           <Route path="/" exact component={HomePage} />
-          <Route path="/uploadartwork" exact component={UploadArtworkPage} />
-          <Route path="/artworkPage" exact component={UploadArtworkPage} />
           <Route path="/signin" exact component={SingInPage} />
           <Route path="/artworks" exact component={ArtworkPage} />
           <Route path="/artworks/:artworkId" exact component={ArtworkPage} />
           <Route path="/stakes/:artworkId/:pieceId" exact component={StakePage} />
+          <Route path="/uploadartwork" exact component={UploadArtworkPage} />
+          <Route
+            path="/uploadartwork/:artworkId/:pieceId"
+            exact
+            component={UploadArtworkPage}
+          />
           <Route path="*" component={Page404} />
         </Switch>
       </BrowserRouter>
