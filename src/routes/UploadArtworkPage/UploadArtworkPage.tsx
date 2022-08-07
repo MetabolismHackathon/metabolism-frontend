@@ -11,7 +11,7 @@ import styles from './UploadArtworkPage.module.scss';
 import { useState } from 'react';
 import axios from 'axios';
 import { ArtworkI } from 'src/types';
-
+import { tiles } from 'src/slugs';
 const generatePieces = (quant: number): PieceI[] => {
   const p = [...Array(quant)].map((_, index) => ({
     id: String(index),
@@ -23,7 +23,7 @@ const generatePieces = (quant: number): PieceI[] => {
         : (index + 2) % 5 === 0
         ? 'oneAnotherUser'
         : null,
-    imageUrl: `/images/tmp/processpics/${getRandomInteger(1, 6)}.jpeg`,
+    imageUrl: `/images/tileset/${tiles[getRandomInteger(1, tiles.length - 1)].file}`,
     likes: 0,
     dislikes: 0,
   }));
@@ -41,6 +41,9 @@ export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
   const submitHandler2: React.FormEventHandler<HTMLFormElement> = async (event) => {
     console.log('submitHandler2');
     setSending(true);
+    setSuccessMessage(null);
+    setErrorMessage(null);
+
     event.preventDefault();
     const formData = new FormData();
 
@@ -70,8 +73,8 @@ export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
           cols: 2,
           piecesQuantity: 4,
           launched: false,
-          width: 800,
-          height: 800,
+          width: 700,
+          height: 700,
           pieces: generatePieces(4),
         };
 

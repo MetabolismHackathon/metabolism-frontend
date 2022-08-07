@@ -22,8 +22,12 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
   });
   const [hovered, setHovered] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
-  const { hoveredOwnerId, piecesEvaluation, setPiecesEvaluation, setHoveredOwnerId } =
-    useArtworkContext();
+  const {
+    hoveredOwnerId,
+    piecesEvaluation,
+    setPiecesEvaluation,
+    setHoveredOwnerId,
+  } = useArtworkContext();
   const history = useHistory();
   const stakeHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     history.push(`/stakes/${artworkId}/${id}`);

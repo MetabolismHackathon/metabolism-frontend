@@ -6,6 +6,7 @@ import { useAuthContext } from './context/authContext';
 import { useArtworkContext } from './context/artworkContext';
 import { getRandomInteger } from './helpers';
 import { ArtworkI, PieceI } from './types';
+import { tiles } from './slugs';
 import { UploadArtworkPage, HomePage, SingInPage, ArtworkPage, StakePage } from 'src/routes';
 import './App.css';
 
@@ -24,7 +25,7 @@ const generatePieces = (quant: number): PieceI[] => {
         : (index + 2) % 5 === 0
         ? 'oneAnotherUser'
         : null,
-    imageUrl: `/images/tmp/processpics/${getRandomInteger(1, 6)}.jpeg`,
+    imageUrl: `/images/tileset/${tiles[getRandomInteger(1, 6)].file}`,
     likes: 0,
     dislikes: 0,
   }));

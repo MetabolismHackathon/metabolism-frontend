@@ -1,16 +1,46 @@
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { Header } from 'src/components';
 import { IStakePageProps } from './StakePageProps';
+import { useArtworkContext } from 'src/context/artworkContext';
+import { useAuthContext } from 'src/context/authContext';
 // import { abi } from 'src/slugs/abi';
 import styles from './StakePage.module.scss';
+import { useState } from 'react';
 // import Web3 from 'web3';
 export const StakePage: React.FC<IStakePageProps> = () => {
   const params: { pieceId: string; artworkId: string } = useParams();
+  const [isSubmitting, setSubmitting] = useState<boolean>(false);
+  const [isSuccess, setSuccess] = useState<boolean>(false);
   const history = useHistory();
-
+  const { artworks, setArtworks } = useArtworkContext();
+  const { currentUser } = useAuthContext();
   const submitStakeHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    history.push(`/artworks/${params.artworkId}`);
+    setSuccess(false);
+    setSubmitting(true);
+    const actualArtwork = artworks.find(({ id }) => id === params.artworkId);
+    console.log(actualArtwork);
+    const updatedPieces = actualArtwork?.pieces.map((piece) =>
+      piece.id === params.pieceId ? { ...piece, ownerId: currentUser } : piece,
+    );
+
+    const updatedArtworks = artworks.map((artwork) =>
+      artwork.id === params.artworkId
+        ? { ...artwork, pieces: !!updatedPieces ? updatedPieces : artwork.pieces }
+        : artwork,
+    );
+
+    console.log('updatedArtwork', updatedArtworks);
+    setArtworks!(updatedArtworks);
+
+    setTimeout(() => {
+      setSubmitting(false);
+      setSuccess(true);
+
+      setTimeout(() => {
+        history.push(`/artworks/${params.artworkId}`);
+      }, 2000);
+    }, 3000);
   };
 
   // const web3 = new Web3();
@@ -329,16 +359,20 @@ export const StakePage: React.FC<IStakePageProps> = () => {
         <div className={styles.artworkId}>ArtworkId: {params.artworkId}</div>
         <div className={styles.pieceId}>PieceId: {params.pieceId}</div>
         <div className={styles.inputGroup}>
-          <label>Your Stake:</label>
-          <input type="text" placeholder={'Type your stake...'} />
+          <label>Your Stake: 0.003 WETH</label>
+          {/* <input type="text" placeholder={'Type your stake...'} /> */}
         </div>
-        <div className={styles.inputGroup}>
+        {/* <div className={styles.inputGroup}>
           <label>Your Login:</label>
           <input type="text" placeholder={'Type your login'} />
-        </div>
+        </div> */}
 
         <button type="submit" className={styles.submitButton}>
-          Submit your stake
+          {isSubmitting
+            ? 'Submitting...'
+            : isSuccess
+            ? 'You stake accepted!'
+            : 'Submit your stake'}
         </button>
       </form>
     </div>

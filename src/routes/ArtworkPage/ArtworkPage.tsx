@@ -13,6 +13,7 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
   const [currentArtwork, setCurrentArtwork] = useState<ArtworkI | null>(null);
   const [isSubmitAllowed, setSubmitAllowed] = useState<boolean>(false);
   const [readyToLaunch, setReadyToLaunch] = useState<boolean>(false);
+  const [loclaunched, setLocLaunched] = useState<boolean>(false);
   const [ownersList, setOwnersList] = useState<{ id: string; piecesQuantity: number }[]>([]);
   const [pieceSize, setPieceSize] = useState<{ width: number; height: number }>({
     width: 0,
@@ -23,6 +24,10 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
     useArtworkContext();
   // console.log('piecesEvaluation', piecesEvaluation);
   // console.log('initialState', initialState);
+
+  const launchSubmitHandler = () => {
+    setLocLaunched(true);
+  };
 
   const changesSubmitHandler = async () => {
     if (currentArtwork) {
@@ -122,7 +127,7 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
         </Link>
       </Header>
 
-      <h1 className={styles.title}>Your artwork {params.artworkId}</h1>
+      <h1 className={styles.title}>Your artwork: {`"${params.artworkId.slice(0, 10)}"`}</h1>
       <div className={styles.artworkContainer}>
         {!!currentArtwork && (
           <div
@@ -152,7 +157,7 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
           </div>
         )}
         <div className={styles.panel}>
-          {currentArtwork?.launched && (
+          {loclaunched && (
             <button
               className={cn(styles.submitButton, isSubmitAllowed ? null : styles.disabled)}
               onClick={changesSubmitHandler}
@@ -161,10 +166,10 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
               Submit Updates
             </button>
           )}
-          {!currentArtwork?.launched && (
+          {!loclaunched && (
             <button
               className={cn(styles.submitButton, readyToLaunch ? null : styles.disabled)}
-              onClick={changesSubmitHandler}
+              onClick={launchSubmitHandler}
               disabled={!readyToLaunch}
             >
               Launch!
@@ -182,6 +187,10 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
             {ownersList.map((owner) => (
               <Owner key={owner.id} {...owner} />
             ))}
+          </div>
+          <div className={styles.artworkDescription}>
+            For tile-set great thanks to{' '}
+            <a href="https://withering-systems.itch.io/city-game-tileset">Creative Commons</a>
           </div>
         </div>
       </div>
