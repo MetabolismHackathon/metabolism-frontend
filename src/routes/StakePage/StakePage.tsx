@@ -19,7 +19,7 @@ export const StakePage: React.FC<IStakePageProps> = () => {
     setSuccess(false);
     setSubmitting(true);
     const actualArtwork = artworks.find(({ id }) => id === params.artworkId);
-    console.log(actualArtwork);
+    // console.log(actualArtwork);
     const updatedPieces = actualArtwork?.pieces.map((piece) =>
       piece.id === params.pieceId ? { ...piece, ownerId: currentUser } : piece,
     );

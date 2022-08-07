@@ -66,6 +66,30 @@ export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
         const meta = data.value.url;
         console.log(fileUrl, ipnft, meta);
 
+        if (params?.artworkId) {
+          // history.push(`/artworks/${params.artworkId}`);
+          const actualArtwork = artworks.find(({ id }) => id === params.artworkId);
+          const updatedPieces = actualArtwork?.pieces.map((piece) =>
+            piece.id === params.pieceId
+              ? { ...piece, imageUrl: ipfsURLConverter(fileUrl) }
+              : piece,
+          );
+
+          const updatedArtworks = artworks.map((artwork) =>
+            artwork.id === params.artworkId
+              ? { ...artwork, pieces: !!updatedPieces ? updatedPieces : artwork.pieces }
+              : artwork,
+          );
+
+          setArtworks!(updatedArtworks);
+          window.localStorage.setItem('slapArtworks', JSON.stringify(updatedArtworks));
+          setErrorMessage(null);
+          setSuccessMessage('Success!');
+
+
+          return;
+        }
+
         const newArtWork: ArtworkI = {
           id: ipnft,
           url: ipfsURLConverter(fileUrl),
