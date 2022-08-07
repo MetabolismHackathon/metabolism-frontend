@@ -76,36 +76,20 @@ export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
         };
 
         const updatedArtworks = [...artworks, newArtWork];
-        const localartworks = window.localStorage.getItem('slapArtworks');
 
         setArtworks!(updatedArtworks);
 
-        if (!!localartworks) {
-          const parsed = JSON.parse(localartworks);
-          console.log('parsed', parsed);
-          return;
-        }
         window.localStorage.setItem('slapArtworks', JSON.stringify(updatedArtworks));
-
-        // window.localStorage.setItem('metaArtwork', JSON.stringify({ }))
-        // const localartworks = window.localStorage.getItem('slapArtworks');
-        // if (!!localartworks) {
-        //   const parsed = JSON.parse(localartworks);
-        //   return;
-        // }
-        // window.localStorage.setItem(
-        //   'slapArtworks',
-        //   JSON.stringify({
-        //     id: 'bafyreiahflenoycpaj2p43ozu32762wez3e4zwfvwpklldjdx2axqvz4iu',
-        //     url: 'ipfs://bafybeigjxv6lsf4s5jiwaih5yxkfzvyktmpswgag7od2s4zjc5xscmbsee/DSC00022.jpeg',
-        //     meta: 'ipfs://bafyreiahflenoycpaj2p43ozu32762wez3e4zwfvwpklldjdx2axqvz4iu/metadata.json',
-        //   }),
-        // );
+        setErrorMessage(null);
+        setSuccessMessage('Success!');
       })
       .catch((error) => {
         console.log('errr', error);
         setSuccessMessage(null);
         setErrorMessage('Error!');
+      })
+      .finally(() => {
+        setSending(false);
       });
 
     // const newArtWork: ArtworkI = {
@@ -203,7 +187,7 @@ export const UploadArtworkPage: React.FC<IUploadArtworkPageProps> = () => {
           /> */}
 
           <button type="submit" className={styles.submitButton} disabled={isSending}>
-            Submit
+            {isSending ? 'Sending...' : 'Submit'}
           </button>
           {successMessage && <div className={styles.success}>{successMessage}</div>}
           {errorMessage && <div className={styles.error}>{errorMessage}</div>}
