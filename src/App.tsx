@@ -30,30 +30,30 @@ const generatePieces = (quant: number): PieceI[] => {
   }));
   return p;
 };
-const artworks: ArtworkI[] = [
-  {
-    id: '0',
-    url: 'images/tmp/island.jpeg',
-    rows: 2,
-    cols: 2,
-    piecesQuantity: 4,
-    width: 700,
-    height: 700,
-    pieces: generatePieces(4),
-    launched: false,
-  },
-  {
-    id: '1',
-    url: 'images/tmp/field.jpeg',
-    rows: 3,
-    cols: 4,
-    piecesQuantity: 12,
-    width: 900,
-    height: 800,
-    pieces: generatePieces(12),
-    launched: false,
-  },
-];
+// const artworks: ArtworkI[] = [
+//   {
+//     id: '0',
+//     url: 'images/tmp/island.jpeg',
+//     rows: 2,
+//     cols: 2,
+//     piecesQuantity: 4,
+//     width: 700,
+//     height: 700,
+//     pieces: generatePieces(4),
+//     launched: false,
+//   },
+//   {
+//     id: '1',
+//     url: 'images/tmp/field.jpeg',
+//     rows: 3,
+//     cols: 4,
+//     piecesQuantity: 12,
+//     width: 900,
+//     height: 800,
+//     pieces: generatePieces(12),
+//     launched: false,
+//   },
+// ];
 
 function App() {
   const [location, setLocation] = useState<string>('');
@@ -69,15 +69,21 @@ function App() {
   }, [account, setCurrentUser, active]);
 
   useEffect(() => {
-    setArtworks!(artworks);
-    const initialState = artworks.map(({ id, pieces }) => {
-      const evalsQuantity = pieces.reduce<number>(
-        (acc, { likes, dislikes }) => likes + dislikes + acc,
-        0,
-      );
-      return { id, evalsQuantity };
-    });
-    setInitialState!(initialState);
+    const artworksString = window.localStorage.getItem('slapArtworks');
+    if (!!artworksString) {
+      const parsedArtworks: ArtworkI[] = JSON.parse(artworksString);
+      console.log(parsedArtworks);
+      setArtworks!(parsedArtworks);
+      const initialState = parsedArtworks.map(({ id, pieces }) => {
+        const evalsQuantity = pieces.reduce<number>(
+          (acc, { likes, dislikes }) => likes + dislikes + acc,
+          0,
+        );
+        return { id, evalsQuantity };
+      });
+      setInitialState!(initialState);
+      return;
+    }
   }, [setArtworks, setInitialState]);
 
   useEffect(() => {
@@ -90,7 +96,18 @@ function App() {
       setLocation(location);
     }
   }, []);
+
   // console.log('current user', currentUser);
+
+  // useEffect(() => {
+  //   const localartworks = window.localStorage.getItem('slapArtworks');
+  //   if (!!localartworks) {
+  //     const parsed = JSON.parse(localartworks);
+  //     // console.log('parsed', parsed);
+  //     // return;
+  //   }
+  //   // console.log('localartworks', localartworks);
+  // });
   return (
     <div className="App">
       <BrowserRouter>

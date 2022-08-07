@@ -104,6 +104,16 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
     }
   }, [currentArtwork]);
 
+  // useEffect(() => {
+  //   const localartworks = window.localStorage.getItem('slapArtworks');
+  //   if (!!localartworks) {
+  //     const parsed = JSON.parse(localartworks);
+  //     console.log('parsed', parsed);
+  //     // return;
+  //   }
+  //   console.log('localartworks', localartworks);
+  // }, []);
+
   return (
     <div className={styles.container}>
       <Header>
@@ -124,7 +134,7 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
           >
             <img
               className={styles.artworkBackground}
-              src={`/${currentArtwork.url}`}
+              src={`${currentArtwork.url}`}
               alt={currentArtwork.url}
               width={`${currentArtwork?.width}px`}
               height={`${currentArtwork?.height}px`}

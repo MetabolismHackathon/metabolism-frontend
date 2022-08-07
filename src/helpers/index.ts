@@ -12,3 +12,9 @@ export const persistLocation = (location: string) => {
 
 export const getRandomInteger: (min: number, max: number) => number = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
+
+export const ipfsURLConverter = (ipfsUrl: string) => {
+  // const x = ipfsUrl.split('//');
+
+  return `${'https://ipfs.io/ipfs/'}${ipfsUrl.split('//')[1]}`;
+};

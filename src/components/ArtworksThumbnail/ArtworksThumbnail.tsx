@@ -16,7 +16,7 @@ export const ArtworksThumbnail: React.FC<IArtworksThumbnailProps> = ({ title, ar
   return (
     <div className={styles.container} onClick={containerClickHandler}>
       {url && <img src={url} alt={`thumb-${id}`} />}
-      <h1>{title}</h1>
+      {/* <h1>{title}</h1> */}
     </div>
   );
 };
