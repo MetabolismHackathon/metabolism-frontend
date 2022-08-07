@@ -12,6 +12,7 @@ import { ArtworkI } from 'src/types';
 export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
   const [currentArtwork, setCurrentArtwork] = useState<ArtworkI | null>(null);
   const [isSubmitAllowed, setSubmitAllowed] = useState<boolean>(false);
+  const [readyToLaunch, setReadyToLaunch] = useState<boolean>(false);
   const [ownersList, setOwnersList] = useState<{ id: string; piecesQuantity: number }[]>([]);
   const [pieceSize, setPieceSize] = useState<{ width: number; height: number }>({
     width: 0,
@@ -95,6 +96,14 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
     }
   }, [currentArtwork, setPiecesEvaluation]);
 
+  useEffect(() => {
+    if (!!currentArtwork) {
+      const notOwnedPieces = currentArtwork.pieces.filter(({ ownerId }) => !ownerId);
+      // console.log('notOwnedPieces', notOwnedPieces);
+      setReadyToLaunch(notOwnedPieces.length === 0);
+    }
+  }, [currentArtwork]);
+
   return (
     <div className={styles.container}>
       <Header>
@@ -133,13 +142,32 @@ export const ArtworkPage: React.FC<IArtworkPageProps> = () => {
           </div>
         )}
         <div className={styles.panel}>
-          <button
-            className={cn(styles.submitButton, isSubmitAllowed ? null : styles.disabled)}
-            onClick={changesSubmitHandler}
-          >
-            Submit Updates
-          </button>
-          <div className={styles.artworkDescription}>description</div>
+          {currentArtwork?.launched && (
+            <button
+              className={cn(styles.submitButton, isSubmitAllowed ? null : styles.disabled)}
+              onClick={changesSubmitHandler}
+              disabled={!isSubmitAllowed}
+            >
+              Submit Updates
+            </button>
+          )}
+          {!currentArtwork?.launched && (
+            <button
+              className={cn(styles.submitButton, readyToLaunch ? null : styles.disabled)}
+              onClick={changesSubmitHandler}
+              disabled={!readyToLaunch}
+            >
+              Launch!
+            </button>
+          )}
+          <div className={styles.artworkDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+            deserunt mollit anim id est laborum.
+          </div>
           <div className={styles.ownersList}>
             {ownersList.map((owner) => (
               <Owner key={owner.id} {...owner} />

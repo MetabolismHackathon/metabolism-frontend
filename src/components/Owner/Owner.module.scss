@@ -1,10 +1,16 @@
 .container {
+  position: relative;
   background-color: lemonchiffon;
   border-radius: 20px;
   display: flex;
   border: 2px dotted red;
   margin-bottom: 10px;
+  z-index: 0;
   &:hover {
+    border: 4px dotted yellow;
+    margin-bottom: 6px;
+  }
+  &.hovered {
     border: 4px dotted yellow;
     margin-bottom: 6px;
   }

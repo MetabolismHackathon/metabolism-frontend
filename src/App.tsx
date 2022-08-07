@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useAuthContext } from './context/authContext';
 import { useArtworkContext } from './context/artworkContext';
+import { getRandomInteger } from './helpers';
 import { ArtworkI, PieceI } from './types';
 import { UploadArtworkPage, HomePage, SingInPage, ArtworkPage, StakePage } from 'src/routes';
 import './App.css';
@@ -23,7 +24,7 @@ const generatePieces = (quant: number): PieceI[] => {
         : (index + 2) % 5 === 0
         ? 'oneAnotherUser'
         : null,
-    imageUrl: '',
+    imageUrl: `/images/tmp/processpics/${getRandomInteger(1, 6)}.jpeg`,
     likes: 0,
     dislikes: 0,
   }));
@@ -39,6 +40,7 @@ const artworks: ArtworkI[] = [
     width: 700,
     height: 700,
     pieces: generatePieces(4),
+    launched: false,
   },
   {
     id: '1',
@@ -49,6 +51,7 @@ const artworks: ArtworkI[] = [
     width: 900,
     height: 800,
     pieces: generatePieces(12),
+    launched: false,
   },
 ];
 
@@ -79,6 +82,7 @@ function App() {
 
   useEffect(() => {
     const previousState = window.localStorage.getItem('slapsketch');
+    // console.log('previousState', previousState);
 
     if (!!previousState) {
       const parsedPreviousState: { location: string } = JSON.parse(previousState);

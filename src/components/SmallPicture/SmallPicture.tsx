@@ -20,8 +20,10 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
     likes: 0,
     dislikes: 0,
   });
+  const [hovered, setHovered] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
-  const { hoveredOwnerId, piecesEvaluation, setPiecesEvaluation } = useArtworkContext();
+  const { hoveredOwnerId, piecesEvaluation, setPiecesEvaluation, setHoveredOwnerId } =
+    useArtworkContext();
   const history = useHistory();
   const stakeHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     history.push(`/stakes/${artworkId}/${id}`);
@@ -47,6 +49,19 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
     }
   };
 
+  const mouseOverHandler: React.MouseEventHandler<HTMLDivElement> = () => {
+    setHoveredOwnerId!(ownerId);
+  };
+
+  const mouseLeavehandler: React.MouseEventHandler<HTMLDivElement> = () => {
+    // console.log('mouse out');
+    setHoveredOwnerId!(null);
+  };
+
+  useEffect(() => {
+    setHovered(!!hoveredOwnerId && hoveredOwnerId === ownerId);
+  }, [hoveredOwnerId, ownerId]);
+
   useEffect(() => {
     if (!!currentUser) {
       setOwnedByCurrentUse(currentUser === ownerId);
@@ -70,11 +85,22 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
   return (
     <div
       className={cn(styles.container)}
-      style={{ width: `${width}px`, height: `${height}px` }}
-      onClick={ownedByCurrentUser ? containerClickHandler : () => undefined}
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+        cursor: ownedByCurrentUser ? 'pointer' : undefined,
+      }}
+      onClick={ownedByCurrentUser ? containerClickHandler : undefined}
+      onMouseOver={mouseOverHandler}
+      onMouseLeave={mouseLeavehandler}
     >
-      {hoveredOwnerId && hoveredOwnerId === ownerId && <div className={styles.hover}></div>}
-      SmallPicture {imageUrl} Yours: {String(ownedByCurrentUser)}
+      {!!ownerId && (
+        <div className={styles.picture}>
+          <img src={imageUrl} alt="" width={`${width}px`} height={`${height}px`} />
+        </div>
+      )}
+      {hovered && <div className={styles.hover}></div>}
+      Yours: {String(ownedByCurrentUser)}
       {!ownerId && (
         <div className={styles.stake}>
           <button className={styles.stakeButton} onClick={stakeHandler}>

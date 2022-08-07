@@ -12,6 +12,7 @@ export interface ArtworkI {
   rows: number;
   cols: number;
   piecesQuantity: number;
+  launched: boolean;
   width: number;
   height: number;
   pieces: PieceI[];

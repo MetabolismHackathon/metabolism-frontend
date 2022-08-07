@@ -1,27 +1,33 @@
+import cn from 'classnames';
 import { useAuthContext } from 'src/context/authContext';
 import { useArtworkContext } from 'src/context/artworkContext';
+
 import { IOwnerProps } from './OwnerProps';
 import styles from './Owner.module.scss';
+import { useEffect, useState } from 'react';
 export const Owner: React.FC<IOwnerProps> = ({ id, piecesQuantity }) => {
+  const [hovered, setHovered] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
-  const { setHoveredOwnerId } = useArtworkContext();
+  const { setHoveredOwnerId, hoveredOwnerId } = useArtworkContext();
 
   const shrinkedId = [id?.substring(0, 5), id?.substring(id.length - 3, id.length)].join(
     '...',
   );
 
   const mouseOverHandler: React.MouseEventHandler<HTMLDivElement> = () => {
-    // console.log('mouse over id', id);
     setHoveredOwnerId!(id);
   };
 
   const mouseLeavehandler: React.MouseEventHandler<HTMLDivElement> = () => {
-    // console.log('mouse out');
     setHoveredOwnerId!(null);
   };
+
+  useEffect(() => {
+    setHovered(!!hoveredOwnerId && hoveredOwnerId === id);
+  }, [hoveredOwnerId, id]);
   return (
     <div
-      className={styles.container}
+      className={cn(styles.container, hovered ? styles.hovered : null)}
       onMouseOver={mouseOverHandler}
       onMouseLeave={mouseLeavehandler}
     >
