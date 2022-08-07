@@ -71,7 +71,7 @@ export const SmallPicture: React.FC<ISmallPictureProps> = ({
     <div
       className={cn(styles.container)}
       style={{ width: `${width}px`, height: `${height}px` }}
-      onClick={containerClickHandler}
+      onClick={ownedByCurrentUser ? containerClickHandler : () => undefined}
     >
       {hoveredOwnerId && hoveredOwnerId === ownerId && <div className={styles.hover}></div>}
       SmallPicture {imageUrl} Yours: {String(ownedByCurrentUser)}
